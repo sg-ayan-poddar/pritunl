@@ -73,6 +73,7 @@ type userPostData struct {
 	DnsServers      []string                 `json:"dns_servers"`
 	DnsSuffix       string                   `json:"dns_suffix"`
 	PortForwarding  []userPortForwardingData `json:"port_forwarding"`
+	DeviceId        string                   `json:"device_id"`
 }
 
 func userPost(c *gin.Context) {

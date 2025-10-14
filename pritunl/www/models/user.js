@@ -32,7 +32,8 @@ define([
       'dns_suffix': null,
       'port_forwarding': null,
       'pin': null,
-      'devices': null
+      'devices': null,
+      'device_id': null
     },
     url: function() {
       var url = '/user/' + this.get('organization');

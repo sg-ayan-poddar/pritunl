@@ -15,7 +15,7 @@ class SettingsConf(SettingsGroupFile):
         'temp_path': '/tmp/pritunl',
         'log_path': '/var/log/pritunl.log',
         'journal_path': '/var/log/pritunl_journal.log',
-        'www_path': '/home/ubuntu/pritunl/www',
+        'www_path': '/home/ubuntu/pritunl/pritunl/www',
         'var_run_path': '/var/run',
         'uuid_path': '/var/lib/pritunl/pritunl.uuid',
         'se_host_key_path': '/var/lib/pritunl/pritunl_se_host.key',

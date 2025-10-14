@@ -24,11 +24,13 @@ def reserve_pooled_user(org, name=None, email=None, pin=None, type=CERT_CLIENT,
         groups=None, auth_type=None, yubico_id=None, disabled=None,
         resource_id=None, mac_addresses=None, dns_servers=None,
         dns_suffix=None, bypass_secondary=None, client_to_client=None,
-        port_forwarding=None):
+        port_forwarding=None, device_id=None):
     doc = {}
 
     if name is not None:
         doc['name'] = name
+    if device_id is not None:
+        doc['device_id'] = device_id
     if email is not None:
         doc['email'] = email
     if pin is not None:

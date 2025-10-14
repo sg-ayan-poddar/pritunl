@@ -89,6 +89,7 @@ def user_get(org_id, user_id=None, page=None):
         'dns_suffix',
         'port_forwarding',
         'devices',
+        'device_id',
     )
 
     if user_id:
@@ -243,7 +244,7 @@ def _create_user(users, org, user_data, remote_addr, pool):
     dns_suffix = utils.filter_str(user_data.get('dns_suffix')) or None
     port_forwarding_in = user_data.get('port_forwarding')
     port_forwarding = []
-
+    DeviceId = utils.filter_str(user_data.get('device_id')) or None
     if auth_type not in AUTH_TYPES:
         auth_type = LOCAL_AUTH
 
@@ -295,7 +296,7 @@ def _create_user(users, org, user_data, remote_addr, pool):
         pin=pin, disabled=disabled, bypass_secondary=bypass_secondary,
         client_to_client=client_to_client, mac_addresses=mac_addresses,
         dns_servers=dns_servers, dns_suffix=dns_suffix,
-        port_forwarding=port_forwarding)
+        port_forwarding=port_forwarding, device_id=DeviceId)
     user.audit_event('user_created',
         'User created from web console',
         remote_addr=remote_addr,
@@ -535,6 +536,24 @@ def user_put(org_id, user_id):
                     event_long='User pin changed',
                     remote_address=remote_addr,
                 )
+
+    if 'device_id' in flask.request.json:
+        device_id = utils.filter_str(flask.request.json['device_id']) or None
+
+        if device_id != user.device_id:
+            user.audit_event('user_updated',
+                'User device ID changed',
+                remote_addr=remote_addr,
+            )
+
+            journal.entry(
+                journal.USER_UPDATE,
+                user.journal_data,
+                event_long='User device ID changed',
+                remote_address=remote_addr,
+            )
+
+        user.device_id = device_id
 
     if 'network_links' in flask.request.json:
         network_links_cur = set(user.get_network_links())

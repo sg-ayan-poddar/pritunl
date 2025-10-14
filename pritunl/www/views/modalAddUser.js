@@ -147,6 +147,7 @@ define([
       var emailReg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
       var dnsSuffix = this.$('.dns-suffix input').val();
       var pin = this.$('.pin input').val() || null;
+      var deviceId = this.$('.device-id input').val() || null;
       var bypassSecondary = this.getBypassSecondarySelect();
       var clientToClient = this.getClientToClientSelect();
       var portForwarding = this.getPortForwarding();
@@ -205,6 +206,7 @@ define([
         groups: groups,
         email: email,
         pin: pin,
+        device_id: deviceId,
         network_links: networkLinks,
         bypass_secondary: bypassSecondary,
         client_to_client: clientToClient,

@@ -60,6 +60,7 @@ class User(mongo.MongoObject):
         'dns_suffix',
         'port_forwarding',
         'devices',
+        'device_id',
     }
     fields_default = {
         'name': '',
@@ -74,7 +75,7 @@ class User(mongo.MongoObject):
             groups=None, auth_type=None, yubico_id=None, disabled=None,
             resource_id=None, bypass_secondary=None, client_to_client=None,
             mac_addresses=None, dns_servers=None, dns_suffix=None,
-            port_forwarding=None, **kwargs):
+            port_forwarding=None, device_id=None, **kwargs):
         mongo.MongoObject.__init__(self)
 
         if org:
@@ -113,6 +114,8 @@ class User(mongo.MongoObject):
             self.dns_suffix = dns_suffix
         if port_forwarding is not None:
             self.port_forwarding = port_forwarding
+        if device_id is not None:
+            self.device_id = device_id
 
     @cached_static_property
     def collection(cls):
@@ -218,6 +221,7 @@ class User(mongo.MongoObject):
             'dns_suffix': self.dns_suffix,
             'port_forwarding': self.port_forwarding,
             'devices': new_devices,
+            'device_id': self.device_id,
         }
 
     def initialize(self):
