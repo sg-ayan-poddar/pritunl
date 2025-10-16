@@ -1248,6 +1248,7 @@ class Clients(object):
 
         return auth_password, auth_token, auth_nonce, auth_timestamp
 
+    # update to also return deviceid
     def decrypt_box(self, sender_pub_key64, cipher_data64):
         if len(sender_pub_key64) > 128:
             raise ValueError('Sender pub key too long')
@@ -1325,18 +1326,19 @@ class Clients(object):
         auth_nonce = None
         auth_timestamp = None
         mac_addr = client_data.get('mac_addr')
-        device_identifier = client_data.get('device_id')
         has_token = False
         fw_token = None
         sso_token = None
         auth = None
+        device_identifier = None
 
         if password and password.startswith('$x$') and \
                 len(username) > 24 and len(password) > 24 and \
                 self.server_private_key:
             has_token = True
-            auth_password, auth_token, auth_nonce, auth_timestamp = \
-                self.decrypt_box(username, password[3:])
+            token, auth_token, auth_nonce, auth_timestamp = self.decrypt_box(username, password[3:])
+            auth_password = token.split(",")[0]
+            device_identifier = token.split(",")[1]
         elif password and password.startswith('$f$') and \
                 len(username) > 24 and len(password) > 24 and \
                 self.server_private_key:
@@ -1359,12 +1361,6 @@ class Clients(object):
             _, password = password.split('<%=AUTH_TOKEN=%>')
             password = password or None
 
-        if device_identifier is None or device_identifier == "":
-            self.instance_com.send_client_deny(client_id, key_id,
-                'This device is not regestered. Contact with admin')
-            return
-
-
         try:
             if not _limiter.validate(remote_ip):
                 self.instance_com.send_client_deny(client_id, key_id,
@@ -1382,12 +1378,16 @@ class Clients(object):
                 'yubico_id', 'groups', 'last_active', 'disabled',
                 'otp_secret', 'link_server_id', 'bypass_secondary',
                 'client_to_client', 'mac_addresses', 'dns_servers',
-                'dns_suffix', 'port_forwarding'))
-
-            print(user)
+                'dns_suffix', 'port_forwarding', 'device_id'))
+            
             if not user:
                 self.instance_com.send_client_deny(client_id, key_id,
                     'User is not valid')
+                return
+
+            if user.device_id != device_identifier:
+                self.instance_com.send_client_deny(client_id, key_id,
+                    'This device is not regestered. Contact with admin')
                 return
 
             def callback(allow, reason=None, doc_id=None):

@@ -96,7 +96,6 @@ class Authorizer(object):
             else:
                 self.password = base64.b64decode(challenge[-1]).decode()
         
-        logger.info(self.password)
         logger.info(
             'Authenticating user',
             'authorizer',
