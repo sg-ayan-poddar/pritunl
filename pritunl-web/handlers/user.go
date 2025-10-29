@@ -106,6 +106,7 @@ type userPutData struct {
 	Name            string                   `json:"name"`
 	Email           string                   `json:"email"`
 	AuthType        string                   `json:"auth_type"`
+	DeviceId		string                   `json:"device_id"`
 	YubicoId        string                   `json:"yubico_id"`
 	Groups          []string                 `json:"groups"`
 	Pin             interface{}              `json:"pin"`

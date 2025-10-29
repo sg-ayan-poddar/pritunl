@@ -12,6 +12,13 @@
     <input type="text" placeholder="Enter groups" value="<%- groups ? groups.join(',') : '' %>">
   </div>
 </div>
+
+<div class="form-group deviceId">
+  <label>Device Id</label>
+  <input type="text" class="form-control" placeholder="Enter device id" 
+    data-toggle="tooltip" title="Device id of user device" value="<%- device_id %>">
+</div>
+
 <div class="form-group pin">
   <label>Pin</label>
   <input type="password" class="form-control" placeholder="Enter user pin"

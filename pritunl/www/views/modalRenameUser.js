@@ -127,6 +127,7 @@ define([
       var email = this.$('.email input').val();
       var emailReg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
       var dnsSuffix = this.$('.dns-suffix input').val();
+      var deviceId = this.$('.deviceId input').val() || null;
       var pin = this.$('.pin input').val() || null;
       var bypassSecondary = this.getBypassSecondarySelect();
       var clientToClient = this.getClientToClientSelect();
@@ -182,11 +183,18 @@ define([
         return;
       }
 
+      if (!deviceId) {
+        this.setAlert('danger', 'Device id can not be empty.',
+          '.form-group.deviceId');
+        return;
+      }
+
       this.setLoading('Modifying user...');
       this.model.save({
         name: name,
         groups: groups,
         email: email,
+        device_id: deviceId,
         pin: pin,
         network_links: networkLinks,
         bypass_secondary: bypassSecondary,
