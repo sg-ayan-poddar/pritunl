@@ -1330,15 +1330,13 @@ class Clients(object):
         fw_token = None
         sso_token = None
         auth = None
-        device_identifier = None
+        device_identifier = client_data.get('device_identifier')
 
         if password and password.startswith('$x$') and \
                 len(username) > 24 and len(password) > 24 and \
                 self.server_private_key:
             has_token = True
-            token, auth_token, auth_nonce, auth_timestamp = self.decrypt_box(username, password[3:])
-            auth_password = token.split(",")[0]
-            device_identifier = token.split(",")[1]
+            auth_password, auth_token, auth_nonce, auth_timestamp = self.decrypt_box(username, password[3:])
         elif password and password.startswith('$f$') and \
                 len(username) > 24 and len(password) > 24 and \
                 self.server_private_key:
